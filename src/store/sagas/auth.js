@@ -14,14 +14,12 @@ export function* logoutSaga(action) {
 }
 
 export function* checkoutTimeoutSaga(action) {
-  console.log('Generator'+action.expirationTime);
   yield delay(action.expirationTime * 1000);
   yield put(actions.logout());
 }
 
 export function* authUserSaga(action) {
   yield put(actions.authStart());
-  // dispatch(authStart());
   const authData = {
     email: action.email,
     password: action.password,
@@ -32,8 +30,6 @@ export function* authUserSaga(action) {
     url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBKmaRb3SjSzaJkjvtq6LNRelqs7S-jzBE';
   }
   const response = yield axios.post(url, authData)
-    // .then(response => {
-    // console.log(response);
     try {
       const expirationDate = yield new Date(new Date().getTime() + response.data.expiresIn * 1000);
       yield localStorage.setItem('token', response.data.idToken);
@@ -42,13 +38,9 @@ export function* authUserSaga(action) {
 
       yield put(actions.authSuccess(response.data.idToken, response.data.localId));
       yield put(actions.checkAuthTimeout(response.data.expiresIn));
-      // dispatch(authSuccess(response.data.idToken, response.data.localId));
-      // dispatch(checkAuthTimeout(response.data.expiresIn));
-      // })
     }
     catch(err) {
       console.log(err);
-      // dispatch(authFail(err.response.data.error));
       yield put(actions.authFail(err.response.data.error))
     }
 }

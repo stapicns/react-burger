@@ -1,6 +1,4 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-orders';
-
 
 export const addIngredient = (name) => {
   return {
@@ -30,15 +28,18 @@ export const fetchIngredientsFailed = () => {
 };
 
 export const initIngredients = () => {
-  return dispatch => {
-    axios.get('https://react-my-burger-583bc.firebaseio.com/ingredients.json')
-      .then(response => {
-        dispatch(setIngredients(response.data));
-        // this.setState({ingredients: response.data});
-      })
-      .catch(error => {
-        dispatch(fetchIngredientsFailed());
-        // this.setState({error: true});
-      });
+  // return dispatch => {
+  //   axios.get('https://react-my-burger-583bc.firebaseio.com/ingredients.json')
+  //     .then(response => {
+  //       dispatch(setIngredients(response.data));
+  //       // this.setState({ingredients: response.data});
+  //     })
+  //     .catch(error => {
+  //       dispatch(fetchIngredientsFailed());
+  //       // this.setState({error: true});
+  //     });
+  // };
+  return {
+    type: actionTypes.INIT_INGREDIENTS
   };
 };
